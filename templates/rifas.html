@@ -1,0 +1,87 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Looterya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="{% static 'css/rifas.css' %}">
+<link rel="icon" href="{% static 'imagens/logo.png' %}">
+
+
+<!--The following script tag downloads a font from the Adobe Edge Web Fonts server for use within the web page. We recommend that you do not modify it.-->
+</head>
+
+<body style="background-image: linear-gradient( #303459,darkblue)">
+{% include 'partials/menu2.html' %}
+<div id="mainWrapper">
+  
+  
+  
+  <div id="content">
+    <section class="sidebar"> 
+    {% if user.is_authenticated %}
+    <h3 style="color: black">Username: {{ user.username }}</h3>
+    <h3 style="color: black">{% include 'partials/_alertas.html' %} </h3>
+		
+    {% for profiles in profile %}
+    <img src="{{ profiles.foto.url }}" class="fotoperfil">
+		<h3 style="color: black">LootPoints:  {{profiles.pontos}} </h3>
+		{% endfor %}  
+		<div id="menubar">
+        <nav class="menu">
+          <ul>
+            <li><a href="{% url 'pagamentos' %}"><input type="button" style="margin-top: 20px" name="button" value="Comprar Moedas" class="buyButton"></a></li>  
+		</ul>
+        </nav>
+      </div>
+    {% else %}
+      <h3 style="color: black">Você ainda não esta logado</h3>
+      <li><a href="{% url 'login' %}"><input type="button" style="margin-top: 20px" name="button" value="Logar" class="buyButton"></a></li>
+    {% endif %}
+		&nbsp;
+		<hr>
+    {% for rifas in rifa %}
+   
+		<h3 style="color: black">{{ rifas.skin.nome }} ({{ rifas.skin.categoria }})</h3>
+      <img src="{{ rifas.skin.link }}" width="100%">
+		<h3 style="color: black">Valor da Entrada: {{ rifas.valor_entrada }} LootPoints</h3>
+    {% endfor %}
+      <div id="menubar">
+        <nav class="menu">
+        </nav>
+      </div>
+    </section>
+    <section class="mainContent">
+      <div class="productRow"><!-- Each product row contains info of 3 elements -->
+        {% for te in t %}
+        <article class="productInfo"><!-- Each individual product description -->
+          {% if te.nome == "" %}
+          <div><img alt="sample" src="{% static 'imagens/user.png' %}" class="fotopessoas"></div>
+          <h3 style="color: white">Nº {{ te.numero }}</h3>
+          <h3 style="color: white"> Disponível </h3>
+          <a href="{% url 'comprarrifa' valor te.numero %}"><input  type="button" name="button" value="Buy" class="buyButton" ></a>
+          {% else %}
+          <div><img alt="sample" src="{{ te.foto }} " class="fotopessoas"></div>
+          <h3 style="color: white">Nº {{ te.numero }}</h3>
+          <h3 style="color: white">{{ te.nome }} </h3>
+          <input type="button" name="button" value="Buy" class="buyButton" style="background-color:gray">
+          {% endif %}
+          
+          
+        </article>
+        {% endfor %}
+
+      </div>
+      
+    </section>
+  </div>
+  
+  {% include 'partials/footer.html' %}
+
+
+</div>
+
+</body>
+</html>
